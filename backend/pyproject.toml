@@ -1,0 +1,51 @@
+[project]
+name = "blank"
+version = "0.1.0"
+authors = [
+    { name = "Faiz Surani", email = "faiz@faizsurani.com" },
+]
+description = "A blank project"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi[standard]>=0.114.2",
+    "pydantic>=2.9.1",
+    "requests[socks]>=2.32.3",
+    "rl",
+    "psycopg2-binary>=2.9.10",
+    "sqlalchemy>=2.0.36",
+    "alembic>=1.14.0",
+    "tenacity>=9.0.0",
+    "httpx[socks]>=0.27.2",
+    "gunicorn>=23.0.0",
+]
+
+[tool.uv]
+dev-dependencies = [
+    "pre-commit>=3.8.0",
+    "ruff>=0.6.4",
+    "ipython>=8.27.0",
+    "jupyterlab>=4.3.0",
+]
+
+[tool.uv.sources]
+rl = { git = "https://github.com/ProbablyFaiz/rl.git" }
+
+[project.urls]
+homepage = "https://github.com/ProbablyFaiz/blank"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+extend-select = ["B", "E", "I", "N", "PTH", "COM", "C4", "UP"]
+extend-ignore = ["COM812", "E712", "E501"]

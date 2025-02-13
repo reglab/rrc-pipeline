@@ -1,0 +1,76 @@
+services:
+  blank-ts:
+    image: tailscale/tailscale:latest
+    hostname: blank-ts
+    volumes:
+      - BLANK_tailscale:/var/lib/tailscale
+    environment:
+      - TS_SOCKS5_SERVER=:1055
+      - TS_HOSTNAME=blank
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_USERSPACE=true
+      - TS_AUTH_ONCE=false
+      - TS_ACCEPT_DNS=true
+      - TS_AUTHKEY=${TAILSCALE_AUTHKEY}
+    restart: unless-stopped
+
+  api:
+    container_name: blank-api
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    command:
+      [
+        "gunicorn",
+        "blank.api.main:app",
+        "--workers",
+        "4",
+        "--worker-class",
+        "uvicorn.workers.UvicornWorker",
+        "--bind",
+        "0.0.0.0:80",
+      ]
+    volumes:
+      - BLANK_data:/data
+    environment:
+      - DATA_ROOT=/data
+      - RL_DEBUG=0
+    env_file:
+      - credentials.env
+    depends_on:
+      blank-ts:
+        condition: service_started
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        - BLANK_API_URL=/api
+    container_name: blank-frontend
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    network_mode: service:blank-ts
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - api
+      - frontend
+    restart: unless-stopped
+
+volumes:
+  blank_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /data/blank
+  blank_tailscale:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /data/blank/tailscale

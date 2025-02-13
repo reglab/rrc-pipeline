@@ -1,0 +1,110 @@
+table,
+.card,
+.accordion,
+.alert,
+.list-group {
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.05),
+    0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+@font-face {
+  font-family: "Equity Caps A";
+  src: url("./fonts/equity_a/equity_a_caps_regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Equity Text A";
+  src: url("./fonts/equity_a/equity_a_regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Equity Text A";
+  src: url("./fonts/equity_a/equity_a_italic.woff2") format("woff2");
+  font-weight: normal;
+  font-style: italic;
+}
+
+/* Add when we start actually using them */
+/* @font-face {
+  font-family: "Equity Caps A";
+  src: url("./fonts/equity_a/equity_a_caps_bold.woff2") format("woff2");
+  font-weight: bold;
+  font-style: normal;
+} */
+
+@font-face {
+  font-family: "Equity Text A";
+  src: url("./fonts/equity_a/equity_a_bold.woff2") format("woff2");
+  font-weight: bold;
+  font-style: normal;
+}
+
+/* @font-face {
+  font-family: "Equity Text A";
+  src: url("./fonts/equity_a/equity_a_bold_italic.woff2") format("woff2");
+  font-weight: bold;
+  font-style: italic;
+}  */
+
+:root {
+  font-family: "Equity Text A", Palatino, Georgia, "Times New Roman", Times,
+    serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  font-variant-ligatures: common-ligatures;
+  -webkit-font-smoothing: subpixel-antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: "Equity Text A", Palatino, Georgia, "Times New Roman", Times,
+    serif;
+  /* background-color: #fffbee; */
+  font-size: 1.125rem;
+}
+.small-caps {
+  font-family: "Equity Caps A", Palatino, Georgia, "Times New Roman", Times,
+    serif;
+  font-variant: normal !important;
+}
+
+.app-heading::after {
+  left: 100%;
+  margin-left: 15px;
+}
+
+.back-link {
+  font-size: 1.1rem;
+}
+
+.Toastify__toast {
+  font-family: inherit !important;
+}
+
+.Toastify__toast--success {
+  background-color: #198754 !important;
+  color: #f1f3f5 !important;
+}
+
+.Toastify__toast-icon svg {
+  fill: #f1f3f5 !important;
+}
+
+.Toastify__toast--error {
+  background-color: #dc3545 !important;
+  color: #f1f3f5 !important;
+}
+
+.Toastify__toast--error .Toastify__toast-icon {
+  fill: #f1f3f5 !important;
+}
