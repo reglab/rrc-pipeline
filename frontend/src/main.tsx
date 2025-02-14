@@ -15,7 +15,7 @@ const queryClient = new QueryClient({
   },
 });
 client.setConfig({
-  baseUrl: import.meta.env.VITE_BLANK_API_URL || "http://poirot:8101",
+  baseUrl: import.meta.env.VITE_RRC_API_URL || "http://poirot:8101",
 });
 
 createRoot(document.getElementById("root")!).render(

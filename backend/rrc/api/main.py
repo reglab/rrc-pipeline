@@ -5,15 +5,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from blank.api.interfaces import (
+from rrc.api.interfaces import (
     ProxyPatternCreate,
     ProxyPatternRead,
     ProxyPatternUpdate,
 )
-from blank.db.models import (
+from rrc.db.models import (
     ProxyPattern,
 )
-from blank.db.session import new_session
+from rrc.db.session import new_session
 
 app = FastAPI()
 app.add_middleware(

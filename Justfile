@@ -9,7 +9,7 @@ install:
 
 # Start the FastAPI backend development server
 api *ARGS:
-    cd backend && uv run fastapi dev blank/api/main.py --host 0.0.0.0 --port 8101 {{ARGS}}
+    cd backend && uv run fastapi dev rrc/api/main.py --host 0.0.0.0 --port 8101 {{ARGS}}
 
 # Start the frontend development server
 frontend *ARGS:

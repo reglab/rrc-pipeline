@@ -14,7 +14,7 @@ const App: React.FC = () => {
         <Col className="text-center py-3">
           <h1 className="app-title">
             <Link to="/" className="text-decoration-none">
-              Blank
+              Rrc
             </Link>
           </h1>
         </Col>

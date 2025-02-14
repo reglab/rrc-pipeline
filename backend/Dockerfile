@@ -29,5 +29,7 @@ COPY --from=builder --chown=app:app /app/.venv /app/.venv
 
 # Set environment
 ENV PATH="/app/.venv/bin:$PATH"
+ENV RRC_DATA_ROOT=/data/internal
+ENV RRC_IMAGE_ROOT=/data/images
 USER app
 WORKDIR /app

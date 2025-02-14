@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict
 
-from blank.db.models import PatternType
+from rrc.db.models import PatternType
 
 
 class ApiModel(BaseModel):

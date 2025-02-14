@@ -1,6 +1,6 @@
 FROM node:20-slim AS builder
 
-ARG BLANK_API_URL
+ARG RRC_API_URL
 
 # Install pnpm
 RUN npm install -g pnpm
@@ -18,7 +18,7 @@ RUN pnpm install --frozen-lockfile
 COPY frontend/ .
 
 # Build the app
-ENV VITE_BLANK_API_URL=${BLANK_API_URL}
+ENV VITE_RRC_API_URL=${RRC_API_URL}
 RUN pnpm run build
 
 

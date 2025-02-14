@@ -1,43 +1,47 @@
 [project]
-name = "blank"
+name = "rrc"
 version = "0.1.0"
 authors = [
-    { name = "Faiz Surani", email = "faiz@faizsurani.com" },
+    { name = "Faiz Surani", email = "faiz@law.stanford.edu" },
 ]
-description = "A blank project"
+description = "A pipeline for identifying racial covenants in property deeds"
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "fastapi[standard]>=0.114.2",
     "pydantic>=2.9.1",
-    "requests[socks]>=2.32.3",
-    "rl",
-    "psycopg2-binary>=2.9.10",
+    "requests>=2.32.3",
     "sqlalchemy>=2.0.36",
-    "alembic>=1.14.0",
     "tenacity>=9.0.0",
-    "httpx[socks]>=0.27.2",
     "gunicorn>=23.0.0",
+    "vllm>=0.7.2",
+    "torch>=2.5.1",
+    "pillow>=11.1.0",
+    "python-doctr[torch]>=0.11.0",
+    "numpy>=1.26.4",
+    "tqdm>=4.67.1",
+    "click>=8.1.7",
 ]
 
 [tool.uv]
 dev-dependencies = [
+    "ipdb>=0.13.13",
     "pre-commit>=3.8.0",
     "ruff>=0.6.4",
-    "ipython>=8.27.0",
-    "jupyterlab>=4.3.0",
 ]
 
-[tool.uv.sources]
-rl = { git = "https://github.com/ProbablyFaiz/rl.git" }
-
 [project.urls]
-homepage = "https://github.com/ProbablyFaiz/blank"
+homepage = "https://github.com/reglab/rrc-pipeline"
+
+[project.scripts]
+ingest = "rrc.ingest.ingest_directory:main"
+ocr = "rrc.ocr.transcribe_pending:main"
+detect = "rrc.inference.detect_pending:main"
+export = "rrc.reporting.export_predictions:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -48,4 +52,4 @@ line-length = 88
 
 [tool.ruff.lint]
 extend-select = ["B", "E", "I", "N", "PTH", "COM", "C4", "UP"]
-extend-ignore = ["COM812", "E712", "E501"]
+extend-ignore = ["COM812", "E712", "E501", "B027"]
