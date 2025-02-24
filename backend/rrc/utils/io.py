@@ -33,6 +33,15 @@ def get_data_path(*args) -> Path:
     raise ValueError("RRC_DATA_ROOT environment variable is not set.")
 
 
+def get_image_path(*args) -> Path:
+    """Get the path to a file nested in the image directory. If the IMAGE_ROOT environment
+    variable is set, use that as the root directory. Otherwise, use the image directory
+    in the project root.
+    """
+    if image_root := getenv("RRC_IMAGE_ROOT"):
+        return Path(image_root).joinpath(*args)
+
+
 def getenv(name: str, default=None) -> str:
     """Get an environment variable. If the variable is not set, return the default value.
 

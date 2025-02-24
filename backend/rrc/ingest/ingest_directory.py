@@ -10,10 +10,13 @@ from sqlalchemy import select
 
 from rrc.db.models import Page
 from rrc.db.session import get_session
+from rrc.utils.io import get_image_path
 from rrc.utils.logger import LOGGER
 
 _VALID_EXTENSIONS = {".jpg", ".jpeg", ".png", ".tiff", ".tif", ".bmp"}
 _MIN_FILE_SIZE = 1024  # Below 1 KB is probably not a real image, we'll save our effort
+
+_DEFAULT_IMAGE_DIR = get_image_path()
 
 
 def _get_image_paths(directory: Path) -> list[Path]:
@@ -52,7 +55,7 @@ def _get_existing_paths(session) -> defaultdict[str, set[int | None]]:
 
 def _create_page_records(session, paths: list[Path]) -> None:
     """Create Page records for new image paths."""
-    pbar = tqdm.tqdm(total=len(paths), desc="Validating and ingesting images")
+    pbar = tqdm.tqdm(total=len(paths), desc="Validating/ingesting images")
     success = fail = 0
 
     for batch in _chunks(paths, 1000):
@@ -94,6 +97,7 @@ def _chunks(lst: list[T], n: int) -> Iterator[list[T]]:
     "-i",
     "--input-dir",
     type=click.Path(exists=True, file_okay=False, path_type=Path),
+    default=_DEFAULT_IMAGE_DIR,
     help="Directory containing images to ingest",
 )
 def main(input_dir: Path) -> None:
