@@ -16,7 +16,7 @@ The easiest way to run this pipeline is on a cloud GPU instance with pre-configu
 
 1. Pull the latest image:
 ```bash
-docker pull reglab-rrc/pipeline:latest
+docker pull ghcr.io/reglab/rrc-pipeline:latest
 ```
 
 2. Run the pipeline stages in sequence:
@@ -30,25 +30,25 @@ export DATA_DIR=/path/to/output
 docker run --rm \
     -v $IMAGE_DIR:/data/images \
     -v $DATA_DIR:/data/output \
-    reglab-rrc/pipeline:latest ingest
+    ghcr.io/reglab/rrc-pipeline:latest ingest
 
 # 2. Run OCR
 docker run --rm --gpus all \
     -v $IMAGE_DIR:/data/images \
     -v $DATA_DIR:/data/output \
-    reglab-rrc/pipeline:latest ocr
+    ghcr.io/reglab/rrc-pipeline:latest ocr
 
 # 3. Detect covenants
 docker run --rm --gpus all \
     -v $IMAGE_DIR:/data/images \
     -v $DATA_DIR:/data/output \
-    reglab-rrc/pipeline:latest detect
+    ghcr.io/reglab/rrc-pipeline:latest detect
 
 # 4. Export results
 docker run --rm \
     -v $IMAGE_DIR:/data/images \
     -v $DATA_DIR:/data/output \
-    reglab-rrc/pipeline:latest export
+    ghcr.io/reglab/rrc-pipeline:latest export
 ```
 
 ## Pipeline Stages
