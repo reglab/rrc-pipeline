@@ -23,31 +23,32 @@ docker pull ghcr.io/reglab/rrc-pipeline:latest
 
 ```bash
 # Mount your image directory and output directory
-export IMAGE_DIR=/path/to/images
-export DATA_DIR=/path/to/output
+# Note: directories must be absolute paths (i.e. beginning with /)
+export RRC_IMAGE_DIR=/path/to/images
+export RRC_DATA_DIR=/path/to/output
 
 # 1. Ingest images
 docker run --rm \
-    -v $IMAGE_DIR:/data/images \
-    -v $DATA_DIR:/data/output \
+    -v $RRC_IMAGE_DIR:/data/images \
+    -v $RRC_DATA_DIR:/data/output \
     ghcr.io/reglab/rrc-pipeline:latest ingest
 
 # 2. Run OCR
 docker run --rm --gpus all \
-    -v $IMAGE_DIR:/data/images \
-    -v $DATA_DIR:/data/output \
+    -v $RRC_IMAGE_DIR:/data/images \
+    -v $RRC_DATA_DIR:/data/output \
     ghcr.io/reglab/rrc-pipeline:latest ocr
 
 # 3. Detect covenants
 docker run --rm --gpus all \
-    -v $IMAGE_DIR:/data/images \
-    -v $DATA_DIR:/data/output \
+    -v $RRC_IMAGE_DIR:/data/images \
+    -v $RRC_DATA_DIR:/data/output \
     ghcr.io/reglab/rrc-pipeline:latest detect
 
 # 4. Export results
 docker run --rm \
-    -v $IMAGE_DIR:/data/images \
-    -v $DATA_DIR:/data/output \
+    -v $RRC_IMAGE_DIR:/data/images \
+    -v $RRC_DATA_DIR:/data/output \
     ghcr.io/reglab/rrc-pipeline:latest export
 ```
 
@@ -73,6 +74,11 @@ docker run --rm \
 ### 4. Export (`export`)
 - Exports detection results to CSV format
 - Includes confidence scores and extracted covenant text where found
+
+### 5. Pipeline Summary (`summarize`)
+- Displays current pipeline progress and statistics
+- Shows total page counts and processing status
+- Reports covenant detection statistics
 
 ## Volume Mounts
 
