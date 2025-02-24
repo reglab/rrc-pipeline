@@ -18,10 +18,10 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 # Copy and install the project
 COPY --chown=app:app backend/rrc/ ./rrc/
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --compile-bytecode --no-editable
+    uv sync --frozen --compile-bytecode --reinstall-package rrc --no-editable
 
 # Set environment
 ENV PATH="/app/.venv/bin:$PATH"
-ENV RRC_DATA_ROOT=/data/internal
+ENV RRC_DATA_ROOT=/data/output
 ENV RRC_IMAGE_ROOT=/data/images
 USER app
