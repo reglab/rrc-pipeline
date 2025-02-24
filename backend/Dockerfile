@@ -35,6 +35,7 @@ ENV RRC_DATA_ROOT=/data/output
 ENV RRC_IMAGE_ROOT=/data/images
 ENV DOCTR_CACHE_DIR=/data/output/doctr_cache
 ENV VLLM_CACHE_DIR=/data/output/vllm_cache
-USER app
+
+USER root
 
 LABEL org.opencontainers.image.source=https://github.com/reglab/rrc-pipeline

@@ -77,6 +77,7 @@ class MistralInferenceService(InferenceService):
             device=DEFAULT_DEVICE,
             enforce_eager=True,
             download_dir=self.model_download_dir,
+            max_model_len=8192,
         )
         return self
 
