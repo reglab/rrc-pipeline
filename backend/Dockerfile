@@ -1,7 +1,12 @@
 FROM python:3.11-slim-bookworm
 
-# Install uv and git
-RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # Create non-root user
@@ -28,6 +33,8 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 ENV PATH="/app/.venv/bin:$PATH"
 ENV RRC_DATA_ROOT=/data/output
 ENV RRC_IMAGE_ROOT=/data/images
+ENV DOCTR_CACHE_DIR=/data/output/doctr_cache
+ENV VLLM_CACHE_DIR=/data/output/vllm_cache
 USER app
 
 LABEL org.opencontainers.image.source=https://github.com/reglab/rrc-pipeline

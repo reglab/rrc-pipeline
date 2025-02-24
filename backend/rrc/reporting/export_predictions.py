@@ -10,7 +10,7 @@ from sqlalchemy.orm import joinedload
 import rrc.utils.io
 from rrc.db.models import CovenantPrediction
 from rrc.db.session import get_session
-from rrc.utils import LOGGER
+from rrc.utils.logger import LOGGER
 
 _DEFAULT_OUTPUT_DIR = rrc.utils.io.get_data_path(
     "reports", datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -18,7 +18,8 @@ _DEFAULT_OUTPUT_DIR = rrc.utils.io.get_data_path(
 _CSV_FIELDS = [
     "image_path",
     "frame_idx",
-    "confidence",
+    "positive_prob",
+    "raw_passage",
     "quotation",
     "model_name",
     "prediction_id",
@@ -58,7 +59,8 @@ def main(output_dir: Path) -> None:
             row = {
                 "image_path": pred.page.image_path,
                 "frame_idx": pred.page.image_frame_idx,
-                "confidence": pred.confidence,
+                "positive_prob": pred.confidence,
+                "raw_passage": pred.raw_passage,
                 "quotation": pred.quotation,
                 "model_name": pred.provenance.model_name,
                 "prediction_id": pred.id,
