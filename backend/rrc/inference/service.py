@@ -50,7 +50,7 @@ class InferenceService(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def predict(self, inputs: list[InferenceInput]) -> list[InferenceResult]:
+    def predict(self, inputs: list[InferenceInput]) -> list[InferenceResult | None]:
         pass
 
     @abc.abstractmethod

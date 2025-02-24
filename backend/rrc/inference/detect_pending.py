@@ -1,6 +1,8 @@
+from pathlib import Path
+
 import click
 import tqdm
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session, joinedload
 
 import rrc.utils.io
@@ -16,8 +18,12 @@ _DEFAULT_MODEL_DOWNLOAD_DIR = rrc.utils.io.get_data_path("model_cache")
 
 
 def _get_pending_count(session: Session) -> int:
-    stmt = select(Page).where(Page.transcriptions.any(), ~Page.predictions.any())
-    return len(session.scalars(stmt).all())
+    stmt = (
+        select(func.count())
+        .select_from(Page)
+        .where(Page.transcriptions.any(), ~Page.predictions.any())
+    )
+    return session.scalar(stmt) or 0
 
 
 def _get_next_batch(session: Session, batch_size: int, last_id: int) -> list[Page]:
@@ -76,11 +82,11 @@ def _save_predictions(
 @click.option(
     "--model-download-dir",
     "-d",
-    type=str,
+    type=click.Path(path_type=Path),
     default=_DEFAULT_MODEL_DOWNLOAD_DIR,
     show_default=True,
 )
-def main(batch_size: int, model_name_or_path: str, model_download_dir: str) -> None:
+def main(batch_size: int, model_name_or_path: str, model_download_dir: Path) -> None:
     """Process all pages with transcriptions but no predictions."""
     session = get_session()
     last_id = 0
