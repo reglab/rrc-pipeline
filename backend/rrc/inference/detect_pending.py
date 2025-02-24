@@ -62,6 +62,7 @@ def _save_predictions(
     "--batch-size",
     type=int,
     default=_DEFAULT_BATCH_SIZE,
+    show_default=True,
     help="Number of pages to process in each batch",
 )
 @click.option(
@@ -69,6 +70,7 @@ def _save_predictions(
     "-m",
     type=str,
     default=_DEFAULT_MODEL_NAME_OR_PATH,
+    show_default=True,
     help="Name or path of the model to use",
 )
 @click.option(
@@ -76,6 +78,7 @@ def _save_predictions(
     "-d",
     type=str,
     default=_DEFAULT_MODEL_DOWNLOAD_DIR,
+    show_default=True,
 )
 def main(batch_size: int, model_name_or_path: str, model_download_dir: str) -> None:
     """Process all pages with transcriptions but no predictions."""

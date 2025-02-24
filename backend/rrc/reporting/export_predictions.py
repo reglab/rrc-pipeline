@@ -32,6 +32,7 @@ _CSV_FIELDS = [
     "--output-dir",
     type=click.Path(path_type=Path),
     default=_DEFAULT_OUTPUT_DIR,
+    show_default=True,
     help="Directory to write CSV files to",
 )
 def main(output_dir: Path) -> None:

@@ -18,6 +18,7 @@ _DEFAULT_BATCH_SIZE = 50
     "--batch-size",
     type=int,
     default=_DEFAULT_BATCH_SIZE,
+    show_default=True,
     help="Number of pages to process in each batch",
 )
 def main(batch_size: int) -> None:

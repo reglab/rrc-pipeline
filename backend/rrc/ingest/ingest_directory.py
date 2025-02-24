@@ -98,6 +98,7 @@ def _chunks(lst: list[T], n: int) -> Iterator[list[T]]:
     "--input-dir",
     type=click.Path(exists=True, file_okay=False, path_type=Path),
     default=_DEFAULT_IMAGE_DIR,
+    show_default=True,
     help="Directory containing images to ingest",
 )
 def main(input_dir: Path) -> None:
