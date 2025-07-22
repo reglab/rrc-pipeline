@@ -4,13 +4,15 @@ from pathlib import Path
 
 import click
 import tqdm
+from rich.console import Console
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload
 
 import rrc.utils.io
 from rrc.db.models import CovenantPrediction
 from rrc.db.session import get_session
-from rrc.utils.logger import LOGGER
+
+console = Console()
 
 _DEFAULT_OUTPUT_DIR = rrc.utils.io.get_data_path(
     "reports", datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -43,7 +45,9 @@ def main(output_dir: Path) -> None:
 
     stmt = select(CovenantPrediction).options(joinedload(CovenantPrediction.page))
     predictions: list[CovenantPrediction] = session.execute(stmt).scalars().all()
-    LOGGER.info(f"Found {len(predictions)} predictions to export")
+    console.print(
+        f"[green]📊[/green] Found [bold blue]{len(predictions)}[/bold blue] predictions to export to [cyan]{output_dir}[/cyan]"
+    )
 
     pos_count = neg_count = 0
     with (
@@ -73,8 +77,9 @@ def main(output_dir: Path) -> None:
                 neg_writer.writerow(row)
                 neg_count += 1
 
-    LOGGER.info(
-        f"Exported {pos_count} positive and {neg_count} negative predictions to {output_dir}"
+    console.print(
+        f"[green]✓[/green] Successfully exported [bold green]{pos_count}[/bold green] positive and "
+        f"[bold red]{neg_count}[/bold red] negative predictions to [cyan]{output_dir}[/cyan]"
     )
 
 

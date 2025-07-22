@@ -94,8 +94,6 @@ The pipeline requires two volume mounts:
 - Each command supports `--help` for additional configuration options
 - The pipeline currently only supports workflow starting from image scans---if you have pre-transcribed text and would find support for that useful, please [open an issue](https://github.com/reglab/rrc-pipeline/issues)
 
-
-
 ## Collaboration
 
 For municipalities or states interested in running this pipeline at scale, we may be able to help. Please contact us at

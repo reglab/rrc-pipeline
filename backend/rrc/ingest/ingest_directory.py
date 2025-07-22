@@ -6,12 +6,14 @@ from typing import TypeVar
 import click
 import PIL.Image
 import tqdm
+from rich.console import Console
 from sqlalchemy import select
 
 from rrc.db.models import Page
 from rrc.db.session import get_session
 from rrc.utils.io import get_image_path
-from rrc.utils.logger import LOGGER
+
+console = Console()
 
 _VALID_EXTENSIONS = {".jpg", ".jpeg", ".png", ".tiff", ".tif", ".bmp"}
 _MIN_FILE_SIZE = 1024  # Below 1 KB is probably not a real image, we'll save our effort
@@ -40,7 +42,7 @@ def _validate_and_get_frame_count(path: Path) -> int | None:
             n_frames = getattr(img, "n_frames", 1)
             return n_frames
     except Exception as e:
-        LOGGER.error(f"Failed to open image {path}: {e}")
+        console.print(f"[red]✗[/red] Failed to open image [cyan]{path}[/cyan]: {e}")
         return None
 
 
@@ -107,22 +109,34 @@ def main(input_dir: Path) -> None:
 
     image_paths = _get_image_paths(input_dir)
     if not image_paths:
-        LOGGER.info("No image files found in %s", input_dir)
+        console.print(
+            f"[yellow]⚠[/yellow] No image files found in [cyan]{input_dir}[/cyan]"
+        )
         return
 
-    LOGGER.info("Found %d image files", len(image_paths))
+    console.print(
+        f"[green]✓[/green] Found [bold blue]{len(image_paths)}[/bold blue] image files in [cyan]{input_dir}[/cyan]"
+    )
 
     existing_paths = _get_existing_paths(session)
-    LOGGER.info("Found %d existing page records", len(existing_paths))
+    console.print(
+        f"[green]✓[/green] Found [bold blue]{len(existing_paths)}[/bold blue] existing page records in database"
+    )
 
     new_paths = [p for p in image_paths if str(p.resolve()) not in existing_paths]
     if not new_paths:
-        LOGGER.info("No new images to ingest")
+        console.print(
+            "[yellow]⚠[/yellow] No new images to ingest - all images already processed"
+        )
         return
 
-    LOGGER.info("Ingesting %d new images", len(new_paths))
+    console.print(
+        f"[green]➤[/green] Ingesting [bold blue]{len(new_paths)}[/bold blue] new images..."
+    )
     _create_page_records(session, new_paths)
-    LOGGER.info("Completed ingesting new images")
+    console.print(
+        f"[green]✓[/green] Successfully completed ingesting [bold blue]{len(new_paths)}[/bold blue] new images"
+    )
 
 
 if __name__ == "__main__":

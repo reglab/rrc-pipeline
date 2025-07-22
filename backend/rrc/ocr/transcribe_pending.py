@@ -1,13 +1,15 @@
 import click
 import tqdm
+from rich.console import Console
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from rrc.db.models import Page, Provenance, Transcription
 from rrc.db.session import get_session
 from rrc.ocr.service import DoctrOCRService
-from rrc.utils.logger import LOGGER
 from rrc.utils.types import OCRResult
+
+console = Console()
 
 _DEFAULT_BATCH_SIZE = 50
 
@@ -29,10 +31,14 @@ def main(batch_size: int) -> None:
     # Get count of pending pages
     pending_count = _get_pending_count(session)
     if pending_count == 0:
-        LOGGER.info("No pending pages found")
+        console.print(
+            "[yellow]⚠[/yellow] No pending pages found - all pages already transcribed"
+        )
         return
 
-    LOGGER.info("Found %d pages pending transcription", pending_count)
+    console.print(
+        f"[green]📄[/green] Found [bold blue]{pending_count}[/bold blue] pages pending transcription (batch size: [cyan]{batch_size}[/cyan])"
+    )
 
     # Process in batches
     with DoctrOCRService() as service:
@@ -49,7 +55,9 @@ def main(batch_size: int) -> None:
             last_id = batch[-1].id
             pbar.update(len(batch))
 
-    LOGGER.info("Completed processing all pending pages")
+    console.print(
+        f"[green]✓[/green] Successfully completed transcribing [bold blue]{pending_count}[/bold blue] pages"
+    )
 
 
 def _get_pending_count(session: Session) -> int:

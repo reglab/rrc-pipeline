@@ -2,23 +2,29 @@ from pathlib import Path
 
 import click
 import tqdm
+from rich.console import Console
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session, joinedload
 
 import rrc.utils.io
 from rrc.db.models import CovenantPrediction, Page, Provenance
 from rrc.db.session import get_session
-from rrc.inference.service import MistralInferenceService, QwenInferenceService
-from rrc.utils.logger import LOGGER
+from rrc.inference.service import (
+    InferenceService,
+    MistralInferenceService,
+    QwenInferenceService,
+)
 from rrc.utils.types import InferenceResult
 
+console = Console()
+
 _DEFAULT_BATCH_SIZE = 250
-_DEFAULT_MODEL_NAME_OR_PATH = "reglab-rrc/mistral-rrc"
+_DEFAULT_MODEL_NAME_OR_PATH = "reglab-rrc/qwen-rrc"
 _DEFAULT_MODEL_DOWNLOAD_DIR = rrc.utils.io.get_data_path("model_cache")
-_DEFAULT_MODEL_TYPE = "mistral"
+_DEFAULT_MODEL_TYPE = "qwen"
 
 
-_MODEL_TYPE_CLASS_MAP = {
+_MODEL_TYPE_CLASS_MAP: dict[str, type[InferenceService]] = {
     "mistral": MistralInferenceService,
     "qwen": QwenInferenceService,
 }
@@ -52,7 +58,9 @@ def _save_predictions(
 ) -> None:
     for page, result in zip(pages, results, strict=True):
         if result is None:
-            LOGGER.warning("Failed to get prediction for page %d", page.id)
+            console.print(
+                f"[yellow]⚠[/yellow] Failed to get prediction for page [cyan]{page.id}[/cyan]"
+            )
             continue
 
         prediction = CovenantPrediction(
@@ -108,10 +116,17 @@ def main(
     last_id = 0
     pending_count = _get_pending_count(session)
     if pending_count == 0:
-        LOGGER.info("No pending pages found")
+        console.print(
+            "[yellow]⚠[/yellow] No pending pages found - all pages already have predictions"
+        )
         return
 
-    LOGGER.info("Found %d pages pending prediction", pending_count)
+    console.print(
+        f"[green]🔍[/green] Found [bold blue]{pending_count}[/bold blue] pages pending prediction"
+    )
+    console.print(
+        f"[green]🤖[/green] Using model: [cyan]{model_name_or_path}[/cyan] (type: [magenta]{model_type}[/magenta], batch size: [cyan]{batch_size}[/cyan])"
+    )
 
     with _MODEL_TYPE_CLASS_MAP[model_type](
         {
@@ -132,7 +147,9 @@ def main(
             last_id = batch[-1].id
             pbar.update(len(batch))
 
-    LOGGER.info("Completed processing all pending pages")
+    console.print(
+        f"[green]✓[/green] Successfully completed processing [bold blue]{pending_count}[/bold blue] pages with predictions"
+    )
 
 
 if __name__ == "__main__":
