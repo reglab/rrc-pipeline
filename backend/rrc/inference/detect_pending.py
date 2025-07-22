@@ -8,13 +8,20 @@ from sqlalchemy.orm import Session, joinedload
 import rrc.utils.io
 from rrc.db.models import CovenantPrediction, Page, Provenance
 from rrc.db.session import get_session
-from rrc.inference.service import MistralInferenceService
+from rrc.inference.service import MistralInferenceService, QwenInferenceService
 from rrc.utils.logger import LOGGER
 from rrc.utils.types import InferenceResult
 
 _DEFAULT_BATCH_SIZE = 250
 _DEFAULT_MODEL_NAME_OR_PATH = "reglab-rrc/mistral-rrc"
 _DEFAULT_MODEL_DOWNLOAD_DIR = rrc.utils.io.get_data_path("model_cache")
+_DEFAULT_MODEL_TYPE = "mistral"
+
+
+_MODEL_TYPE_CLASS_MAP = {
+    "mistral": MistralInferenceService,
+    "qwen": QwenInferenceService,
+}
 
 
 def _get_pending_count(session: Session) -> int:
@@ -86,7 +93,16 @@ def _save_predictions(
     default=_DEFAULT_MODEL_DOWNLOAD_DIR,
     show_default=True,
 )
-def main(batch_size: int, model_name_or_path: str, model_download_dir: Path) -> None:
+@click.option(
+    "--model-type",
+    "-t",
+    type=click.Choice(["mistral", "qwen"]),
+    default=_DEFAULT_MODEL_TYPE,
+    show_default=True,
+)
+def main(
+    batch_size: int, model_name_or_path: str, model_download_dir: Path, model_type: str
+) -> None:
     """Process all pages with transcriptions but no predictions."""
     session = get_session()
     last_id = 0
@@ -97,7 +113,7 @@ def main(batch_size: int, model_name_or_path: str, model_download_dir: Path) -> 
 
     LOGGER.info("Found %d pages pending prediction", pending_count)
 
-    with MistralInferenceService(
+    with _MODEL_TYPE_CLASS_MAP[model_type](
         {
             "model_name_or_path": model_name_or_path,
             "model_download_dir": model_download_dir,
