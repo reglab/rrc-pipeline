@@ -1,6 +1,6 @@
 # Racial Covenant Detection Pipeline
 
-*Authors: Faiz Surani, Mirac Suzgun, Vyoma Raman, Christopher D. Manning, Peter Henderson, Daniel E. Ho. Paper citation [below](#citation).*
+Authors: *Faiz Surani, Mirac Suzgun, Vyoma Raman, Christopher D. Manning, Peter Henderson, Daniel E. Ho.* Paper citation [below](#citation).
 
 A pipeline for identifying racial covenants in property deeds. The pipeline processes images of property deeds through OCR and covenant detection models to identify discriminatory language.
 
