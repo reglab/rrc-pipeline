@@ -1,9 +1,9 @@
-import click
 from rich.console import Console
 from rich.progress_bar import ProgressBar
 from rich.table import Table
 from sqlalchemy import func, select
 
+import rrc.utils.click as click
 from rrc.db.models import CovenantPrediction, Page, Transcription
 from rrc.db.session import get_session
 

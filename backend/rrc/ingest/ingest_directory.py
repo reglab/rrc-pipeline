@@ -3,12 +3,12 @@ from collections.abc import Iterator
 from pathlib import Path
 from typing import TypeVar
 
-import click
 import PIL.Image
 import tqdm
 from rich.console import Console
 from sqlalchemy import select
 
+import rrc.utils.click as click
 from rrc.db.models import Page
 from rrc.db.session import get_session
 from rrc.utils.io import get_image_path

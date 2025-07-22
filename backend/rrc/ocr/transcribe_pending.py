@@ -1,9 +1,9 @@
-import click
 import tqdm
 from rich.console import Console
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+import rrc.utils.click as click
 from rrc.db.models import Page, Provenance, Transcription
 from rrc.db.session import get_session
 from rrc.ocr.service import DoctrOCRService

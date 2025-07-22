@@ -26,6 +26,7 @@ dependencies = [
     "tqdm>=4.67.1",
     "click>=8.1.7",
     "rich>=13.8.1",
+    "rich-click>=1.8.9",
 ]
 
 [tool.uv]
@@ -39,11 +40,7 @@ dev-dependencies = [
 homepage = "https://github.com/reglab/rrc-pipeline"
 
 [project.scripts]
-ingest = "rrc.ingest.ingest_directory:main"
-ocr = "rrc.ocr.transcribe_pending:main"
-detect = "rrc.inference.detect_pending:main"
-export = "rrc.reporting.export_predictions:main"
-summarize = "rrc.reporting.summarize_db:main"
+rrc = "rrc.cli:cli"
 
 [build-system]
 requires = ["hatchling"]

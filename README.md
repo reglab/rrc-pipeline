@@ -31,51 +31,54 @@ export RRC_DATA_DIR=/path/to/output
 docker run --rm \
     -v $RRC_IMAGE_DIR:/data/images \
     -v $RRC_DATA_DIR:/data/output \
-    ghcr.io/reglab/rrc-pipeline:latest ingest
+    ghcr.io/reglab/rrc-pipeline:latest rrc ingest
 
 # 2. Run OCR
 docker run --rm --gpus all \
     -v $RRC_IMAGE_DIR:/data/images \
     -v $RRC_DATA_DIR:/data/output \
-    ghcr.io/reglab/rrc-pipeline:latest ocr
+    ghcr.io/reglab/rrc-pipeline:latest rrc ocr
 
 # 3. Detect covenants
 docker run --rm --gpus all \
     -v $RRC_IMAGE_DIR:/data/images \
     -v $RRC_DATA_DIR:/data/output \
-    ghcr.io/reglab/rrc-pipeline:latest detect
+    ghcr.io/reglab/rrc-pipeline:latest rrc detect
 
 # 4. Export results
 docker run --rm \
     -v $RRC_IMAGE_DIR:/data/images \
     -v $RRC_DATA_DIR:/data/output \
-    ghcr.io/reglab/rrc-pipeline:latest export
+    ghcr.io/reglab/rrc-pipeline:latest rrc export
 ```
 
 ## Pipeline Stages
 
-### 1. Ingest (`ingest`)
+> [!NOTE]
+> To see all available commands, run `docker run --rm ghcr.io/reglab/rrc-pipeline:latest rrc --help`.
+
+### 1. Ingest (`rrc ingest`)
 - Scans input directory for image files (jpg, jpeg, png, tiff, tif, bmp)
 - Validates images can be opened
 - Handles multi-page TIFF files
 - Creates database records for new images
 
-### 2. OCR (`ocr`)
+### 2. OCR (`rrc ocr`)
 - Transcribes images using the DocTR OCR library
 - Requires GPU acceleration
 - Processes only images without existing transcriptions
 
-### 3. Detection (`detect`)
+### 3. Detection (`rrc detect`)
 - Analyzes transcribed text using our Mistral-based covenant detection model
 - Requires GPU acceleration
 - Identifies presence of racial covenants and extracts relevant passages
 - Processes only transcribed pages without existing predictions
 
-### 4. Export (`export`)
+### 4. Export (`rrc export`)
 - Exports detection results to CSV format
 - Includes confidence scores and extracted covenant text where found
 
-### 5. Pipeline Summary (`summarize`)
+### 5. Pipeline Summary (`rrc summarize`)
 - Displays current pipeline progress and statistics
 - Shows total page counts and processing status
 - Reports covenant detection statistics

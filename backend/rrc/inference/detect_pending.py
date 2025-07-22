@@ -1,11 +1,11 @@
 from pathlib import Path
 
-import click
 import tqdm
 from rich.console import Console
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session, joinedload
 
+import rrc.utils.click as click
 import rrc.utils.io
 from rrc.db.models import CovenantPrediction, Page, Provenance
 from rrc.db.session import get_session

@@ -93,6 +93,8 @@ with spelling and formatting errors fixed.
         self.model_download_dir = self.options.get("model_download_dir")
 
     def __enter__(self):
+        if DEFAULT_DEVICE is None:
+            raise RuntimeError("No CUDA or MPS device available")
         self.vllm_model = vllm.LLM(
             model=self.model_name_or_path,
             device=DEFAULT_DEVICE,

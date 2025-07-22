@@ -45,6 +45,8 @@ class DoctrOCRService(OCRService):
         super().__init__(options)
 
     def __enter__(self):
+        if DEFAULT_DEVICE is None:
+            raise RuntimeError("No CUDA or MPS device available")
         self.model = ocr_predictor(
             det_arch=_DOCTR_DET_ARCH,
             reco_arch=_DOCTR_RECO_ARCH,

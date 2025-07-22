@@ -2,12 +2,12 @@ import csv
 from datetime import datetime
 from pathlib import Path
 
-import click
 import tqdm
 from rich.console import Console
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload
 
+import rrc.utils.click as click
 import rrc.utils.io
 from rrc.db.models import CovenantPrediction
 from rrc.db.session import get_session
